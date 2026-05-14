@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+import numpy as np
 
 def add_rul(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
