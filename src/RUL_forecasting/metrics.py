@@ -26,7 +26,7 @@ def nasa_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     score = np.where(d < 0, 
                      np.exp(-d / 13) - 1, 
                      np.exp( d / 10) - 1)
-    return float(np.sum(score))
+    return round(float(np.sum(score)), 3)
 
 
 def evaluate(name: str,
