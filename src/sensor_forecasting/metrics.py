@@ -7,6 +7,9 @@ Metrics
 - MAE  : Mean Absolute Error
 - R²   : Coefficient of determination
 """
+
+import numpy as np
+
 def evaluate_forecast(model_name, y_true, y_pred, sensor, results):
     rmse = round(float(np.sqrt(mean_squared_error(y_true, y_pred))), 3)
     mae  = round(float(mean_absolute_error(y_true, y_pred)), 3)
