@@ -9,6 +9,8 @@ Metrics
 """
 
 import numpy as np
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
 
 def evaluate_forecast(model_name, y_true, y_pred, sensor, results):
     rmse = round(float(np.sqrt(mean_squared_error(y_true, y_pred))), 3)
