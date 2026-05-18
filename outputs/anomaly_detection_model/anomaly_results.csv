@@ -1,0 +1,4 @@
+Model,ROC-AUC,Precision,Recall,F1
+Isolation Forest,0.759,0.984,0.391,0.56
+Autoencoder,0.677,0.973,0.221,0.361
+Z-Score,0.645,0.992,0.294,0.453
