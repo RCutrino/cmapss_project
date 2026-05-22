@@ -25,7 +25,7 @@ def select_best_rul_model(models: dict,
     for name, model in models.items():
         try:
             if hasattr(model, 'predict'):
-                preds = np.array(model.predict(X_test)).clip(0, 125)
+                preds = np.array(model.predict(X_test)).flatten().clip(0, 125)
             else:
                 continue
 
