@@ -12,26 +12,6 @@ def add_rul(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def get_low_variance_sensors(df, threshold=1e-2):
-    """
-    Identify sensors with near-zero variance.
-    """
-    sensor_cols = [col for col in df.columns if "sensor" in col]
-    variance_df = df[sensor_cols].var().sort_values()
-    
-    return variance_df[variance_df < threshold].index.tolist()
-
-
-def get_top_correlated_sensors(df, target,top_n=5):
-    """
-    Identify the top correlated sensors with the target variable.
-    """
-    sensor_cols = [col for col in df.columns if "sensor" in col]
-    corr = df[sensor_cols + [target]].corr()[target].drop(target)
-    
-    return corr.abs().sort_values(ascending=False).head(top_n).index.tolist()
-
-
 def normalize_sensors(df, scaler=None):
     """
     Normalize sensor columns using StandardScaler.
