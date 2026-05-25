@@ -6,4 +6,4 @@ __all__ = ['evaluate_forecast',
            'build_sensor_lstm',
            'add_forecast_targets',
            'make_forecast_sequences',
-           'DelayedEarlyStopping]
+           'DelayedEarlyStopping']
