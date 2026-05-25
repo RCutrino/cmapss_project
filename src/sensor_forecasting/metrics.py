@@ -10,6 +10,7 @@ Metrics
 
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from tensorflow.keras.callbacks import EarlyStopping
 
 
 def evaluate_forecast(model_name, y_true, y_pred, sensor, results):
