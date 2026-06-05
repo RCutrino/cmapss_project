@@ -51,8 +51,8 @@ def make_forecast_sequences(df: pd.DataFrame,
         if len(vals) < seq_len + 1:
             continue
 
-        for i in range(len(vals) - seq_len):
+        for i in range(len(vals) - seq_len + 1):
             X.append(vals[i : i + seq_len])      # window [t-seq_len+1, t]
-            y.append(targets[i + seq_len])         # target at t+1
+            y.append(targets[i + seq_len - 1])         # target at t+1
 
     return np.array(X), np.array(y)
