@@ -5,6 +5,9 @@ Data preparation utilities for sensor forecasting.
 import pandas as pd
 import numpy as np
 
+np.random.seed(42)
+
+
 def add_forecast_targets(df: pd.DataFrame, sensors: list) -> pd.DataFrame:
     """
     Adds t+1 target columns per sensor, grouped by engine.
@@ -21,6 +24,27 @@ def add_forecast_targets(df: pd.DataFrame, sensors: list) -> pd.DataFrame:
     df = df.dropna(subset=[f'{s}_target' for s in sensors])
     
     return df.reset_index(drop=True)
+
+
+def split_train_for_es(train_df: pd.DataFrame,
+                       es_ratio: float = 0.2) -> tuple:
+    """
+    Split train_df into:
+    - train_fit : first (1-es_ratio)% of cycles per engine → training LSTM
+    - train_es  : last es_ratio% of cycles per engine   → EarlyStopping LSTM
+
+    train_df remains unchanged for XGBoost (which uses TimeSeriesSplit internally).
+    val_df is now used exclusively for final evaluation.
+    """
+    fit_parts, es_parts = [], []
+    for _, eng in train_df.groupby('engine_id'):
+        eng = eng.sort_values('cycle')
+        cutoff = int(len(eng) * (1 - es_ratio))
+        fit_parts.append(eng.iloc[:cutoff])
+        es_parts.append(eng.iloc[cutoff:])
+    train_fit = pd.concat(fit_parts).reset_index(drop=True)
+    train_es  = pd.concat(es_parts).reset_index(drop=True)
+    return train_fit, train_es
 
 
 def make_forecast_sequences(df: pd.DataFrame,
@@ -56,3 +80,19 @@ def make_forecast_sequences(df: pd.DataFrame,
             y.append(targets[i + seq_len - 1])         # target at t+1
 
     return np.array(X), np.array(y)
+
+
+def get_aligned_val(df: pd.DataFrame, seq_len: int) -> pd.DataFrame:
+    """
+    Returns the rows of df that can be evaluated by all models.
+    For each engine, skips the first seq_len-1 cycles — those for which
+    the LSTM does not yet have a complete window.
+    """
+    parts = []
+    for _, eng in df.groupby('engine_id'):
+        eng = eng.sort_values('cycle')
+        if len(eng) < seq_len:
+            continue
+        parts.append(eng.iloc[seq_len - 1:])
+    return pd.concat(parts).reset_index(drop=True)
+
