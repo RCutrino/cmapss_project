@@ -12,6 +12,6 @@ __all__ = ['evaluate_forecast',
            'build_sensor_tcn',
            'add_forecast_targets',
            'make_forecast_sequences',
-           'split_train_for_es,
+           'split_train_for_es',
            'get_aligned_val'
            ]
