@@ -72,7 +72,7 @@ def make_forecast_sequences(df: pd.DataFrame,
         vals = eng[sensors].values
         targets = eng[target].values
 
-        if len(vals) < seq_len + 1:
+        if len(vals) < seq_len:
             continue
 
         for i in range(len(vals) - seq_len + 1):
